@@ -4,12 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
-import {
-  ChevronDownIcon,
-  HorizontaLDots,
-} from "../icons/index";
 
-import { LayoutGrid, PiggyBank, Store, UserRoundCog, Users } from 'lucide-react'
+import { ChevronDownIcon, Ellipsis, LayoutGrid, PiggyBank, Store, UserRoundCog } from 'lucide-react'
 
 type NavItem = {
   name: string;
@@ -273,7 +269,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <HorizontaLDots />
+                  <Ellipsis />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
@@ -290,7 +286,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Pengaturan"
                 ) : (
-                  <HorizontaLDots />
+                  <Ellipsis />
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}

@@ -55,6 +55,7 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
   ];
 
   const handleNewData = (newFinance: Finance) => {
+    console.log(newFinance)
     setFinances((prev) => [newFinance, ...prev]);
     closeAddModal();
   };
@@ -274,7 +275,7 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
                 <ChevronDownIcon size={18} />
               </span>
             </div>
-            <span onClick={clearFilter} className="border border-gray-300 cursor-pointer p-2.5 rounded-lg">
+            <span onClick={clearFilter} className="border dark:border-white/20 border-gray-300 cursor-pointer p-2.5 rounded-lg">
               <CircleX className="text-red-600" />
             </span>
           </div>

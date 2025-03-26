@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-import { getTotalAmountsBySource } from "@/app/(admin)/dashboard/finances/lib/data";
+import { getTotalAmountsYearly } from "@/app/(admin)/dashboard/finances/lib/data";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -13,10 +13,7 @@ export default function SourceSalesChart() {
 
   useEffect(() => {
     async function loadChart() {
-      const salesData = await getTotalAmountsBySource();
-
-      const sourceNames = salesData.map((item) => item.name);
-      const totals = salesData.map((item) => item.total);
+      const totals = await getTotalAmountsYearly();
       
       setOptions({
         colors: ["#465fff"],
@@ -41,7 +38,7 @@ export default function SourceSalesChart() {
           colors: ["transparent"],
         },
         xaxis: {
-          categories: sourceNames,
+          categories: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
           axisBorder: { show: false },
           axisTicks: { show: false },
         },

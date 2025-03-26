@@ -1,5 +1,5 @@
 export type Finance = {
-    source_id: string;
+    sourceId: string;
     type: string;
     amount: string;
     description: string;

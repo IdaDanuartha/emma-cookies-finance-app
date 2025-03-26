@@ -41,7 +41,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ user }) => {
           <Image
             width={44}
             height={44}
-            src={user?.profile_image}
+            src={user?.profile_image ?? null}
             alt="User"
           />
         </span>

@@ -15,7 +15,7 @@ export default async function UserMetaCard() {
               <Image
                 width={80}
                 height={80}
-                src={user?.profile_image}
+                src={user?.profile_image ?? null}
                 alt="user"
               />
             </div>

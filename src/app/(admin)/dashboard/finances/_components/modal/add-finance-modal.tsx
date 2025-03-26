@@ -27,8 +27,10 @@ export default function AddFinanceModal({
     type: "",
     amount: "",
     description: "",
-    date: "",
-    sources: ""
+    date: new Date().toISOString().split("T")[0],
+    sources: {
+      name: "",
+    }
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof FinanceForm, string>>>({});
@@ -78,9 +80,9 @@ export default function AddFinanceModal({
 
     const response = await postFinance(undefined, formData);
     if (response.success) {
-        onSuccess(form)
-        setForm({ sourceId: "", type: "", amount: "", description: "", date: "" });
-        toast.success(response.message);
+      onSuccess(form)
+      setForm({ sourceId: "", type: "", amount: "", description: "", date: "", sources: {name: ""}});
+      toast.success(response.message);
     } else {
         toast.error(response.message);
     }
@@ -137,7 +139,17 @@ export default function AddFinanceModal({
             <div className="relative">
               <Select
                 options={sourceOptions}
-                onChange={(value) => setSelectedSource(value)} 
+                onChange={(value) => {
+                  const selected = sourceOptions.find(opt => opt.value === value);
+            
+                  setSelectedSource(value);
+                  setForm((prev) => ({
+                    ...prev,
+                    sources: {
+                      name: selected?.label || "",
+                    },
+                  }));
+                }}              
                 value={
                   selectedSource
                   ? sourceOptions.find(opt => opt.value === selectedSource)
