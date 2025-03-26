@@ -15,7 +15,7 @@ type Filter = "day" | "weekly" | "monthly" | "yearly";
 
 export default function StatisticsChart() {
   const [options, setOptions] = useState<ApexOptions>();
-  const [series, setSeries] = useState<[]>([]);
+  const [series, setSeries] = useState<ApexAxisChartSeries>([]);
   const [selectedTab, setSelectedTab] = useState<Filter>("day");
 
   useEffect(() => {
@@ -26,8 +26,8 @@ export default function StatisticsChart() {
         weekly: "week",
         monthly: "month",
         yearly: "year",
-      }[filter];
-
+      }[filter] as "day" | "week" | "month" | "year";
+      
       const salesData = await getTotalAmountsBySource(mappedFilter);
 
       const sourceNames = salesData.map((item) => item.name);

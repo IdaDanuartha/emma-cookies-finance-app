@@ -12,6 +12,8 @@ import Select from "@/components/form/Select";
 import { ChevronDownIcon } from "lucide-react";
 import { getSourceOptions } from "@/utils/get_source_options";
 import { formatDateInput } from "@/utils/format";
+import { Finance } from "@/types/finance";
+import { z } from "zod";
 
 export default function EditFinanceModal({
   isOpen,
@@ -21,22 +23,24 @@ export default function EditFinanceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newFinance) => void
-  data
+  onSuccess: (newFinance: Finance) => void
+  data?: Finance | null
 }) {
   const [form, setForm] = useState({
     id: "",
     sourceId: "",
     type: "",
-    amount: "",
+    amount: 0,
     description: "",
     date: "",
-    sources: ""
+    sources: {
+      name: ""
+    }
   });
 
-  const [selectedSource, setSelectedSource] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [sourceOptions, setSourceOptions] = useState([]);
+  const [selectedSource, setSelectedSource] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [sourceOptions, setSourceOptions] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     if (data) {
@@ -44,19 +48,22 @@ export default function EditFinanceModal({
         id: data.id || "",
         sourceId: data.sourceId || "",
         type: data.type || "",
-        amount: data.amount || "",
+        amount: data.amount || 0,
         description: data.description || "",
         date: data.date ? formatDateInput(data.date) : "",
-        sources: data.sources
+        sources: {
+          name: data.sources.name
+        }
       });
     }
 
-    setSelectedSource(data?.sourceId || null);
-    setSelectedType(data?.type || null);
+    if(data?.sourceId) setSelectedSource(data.sourceId);
+    if(data?.type) setSelectedType(data.type);
   }, [data]);
 
 
   const [errors, setErrors] = useState<Partial<Record<keyof FinanceForm, string>>>({});
+  type FinanceForm = z.infer<typeof schemaFinance>;
 
   const validateField = (field: keyof FinanceForm, value: string) => {
     const partialObject = { ...form, [field]: value };
@@ -97,11 +104,11 @@ export default function EditFinanceModal({
     const formData = new FormData();
     formData.append("sourceId", form.sourceId);
     formData.append("type", form.type);
-    formData.append("amount", form.amount);
+    formData.append("amount", form.amount.toString());
     formData.append("description", form.description);
     formData.append("date", form.date);
 
-    const response = await updateFinance(undefined, formData, data.id);
+    const response = await updateFinance(undefined, formData, data?.id);
 
     if (response.success) {
       onSuccess(form)
@@ -124,7 +131,7 @@ export default function EditFinanceModal({
       }));
       validateField("sourceId", selectedSource);
     }
-  }, [selectedSource]);
+  }, [selectedSource, validateField]);
 
   const typeOptions = [
     { value: "pemasukan", label: "Pemasukan" },
@@ -139,7 +146,7 @@ export default function EditFinanceModal({
       }));
       validateField("type", selectedType);
     }
-  }, [selectedType]);
+  }, [selectedType, validateField]);
 
   return (
     <Modal
@@ -159,10 +166,10 @@ export default function EditFinanceModal({
               <Select
                 options={sourceOptions}
                 onChange={(value) => setSelectedSource(value)} 
-                value={
+                defaultValue={
                   selectedSource
-                  ? sourceOptions.find(opt => opt.value === selectedSource)
-                  : null
+                  ? sourceOptions.find(opt => opt.value === selectedSource)?.value
+                  : ""
                 }
                 placeholder="Pilih sumber pendapatan"
                 className={errors.sourceId ? "border-red-500 focus-visible:ring-red-500" : ""}
@@ -182,10 +189,10 @@ export default function EditFinanceModal({
               <Select
                 options={typeOptions}
                 onChange={(value) => setSelectedType(value)} 
-                value={
+                defaultValue={
                   selectedType
-                  ? typeOptions.find(opt => opt.value === selectedType)
-                  : null
+                  ? typeOptions.find(opt => opt.value === selectedType)?.value
+                  : ""
                 }
                 placeholder="Pilih jenis keuangan"
                 className={errors.type ? "border-red-500 focus-visible:ring-red-500" : ""}

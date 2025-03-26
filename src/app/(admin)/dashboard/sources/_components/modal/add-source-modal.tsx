@@ -9,6 +9,8 @@ import { postSource } from "../../lib/actions";
 import { schemaSource } from "@/lib/schema";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Source } from "@/types/source";
+import { z } from "zod";
 
 export default function AddSourceModal({
   isOpen,
@@ -17,13 +19,16 @@ export default function AddSourceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newSource) => void
+  onSuccess: (newSource: Source) => void
 }) {
   const [form, setForm] = useState({
+    id: "",
     name: "",
     location: "",
+    updatedAt: "",
   });
 
+  type SourceForm = z.infer<typeof schemaSource>;
   const [errors, setErrors] = useState<Partial<Record<keyof SourceForm, string>>>({});
 
   const validateField = (field: keyof SourceForm, value: string) => {
@@ -55,6 +60,7 @@ export default function AddSourceModal({
       setErrors({
         name: fieldErrors.name?.[0] || "",
         location: fieldErrors.location?.[0] || "",
+        updatedAt: fieldErrors.updatedAt?.[0] || "",
       });
       return;
     }
@@ -62,12 +68,13 @@ export default function AddSourceModal({
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("location", form.location);
+    formData.append("updatedAt", form.updatedAt);
 
     const response = await postSource(undefined, formData);
 
     if (response.success) {
         onSuccess(form)
-        setForm({ name: "", location: "" });
+        setForm({ id: "", name: "", location: "", updatedAt: "" });
         toast.success(response.message);
     } else {
         toast.error(response.message);

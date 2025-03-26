@@ -15,7 +15,8 @@ export const schemaSource = z.object({
 	name: z
 		.string({ required_error: "Sumber pendapatan wajib diisi" })
 		.min(1, { message: "Sumber pendapatan wajib diisi" }),
-	location: z.string().optional()
+	location: z.string().optional(),
+	updatedAt: z.string().optional(),
 });
 
 export const schemaFinance = z.object({
@@ -39,7 +40,10 @@ export const schemaFinance = z.object({
 export const schemaUser = z.object({
 	name: z
 		.string({ required_error: "Nama wajib diisi" })
-		.min(4, { message: "Name harus memiliki minimal 4 karakter" }),
+		.min(4, { message: "Nams harus memiliki minimal 4 karakter" }),
+	email: z
+		.string({ required_error: "Email wajib diisi" })
+		.min(1, { message: "Email wajib diisi" }),
 	profile_image: z
 		.any()
 		.refine((files: FileList | File[]) => files && files.length === 1, {

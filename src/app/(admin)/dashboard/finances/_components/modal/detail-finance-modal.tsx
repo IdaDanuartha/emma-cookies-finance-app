@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
 import { formatDate, formatRupiah } from "@/utils/format";
+import { Finance } from "@/types/finance";
 
 export default function DetailFinanceModal({
   isOpen,
@@ -14,13 +15,13 @@ export default function DetailFinanceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  data
+  data?: Finance | null
 }) {
   const [form, setForm] = useState({
     id: "",
     sourceName: "",
     type: "",
-    amount: "",
+    amount: 0,
     description: "",
     date: "",
   });
@@ -31,7 +32,7 @@ export default function DetailFinanceModal({
         id: data.id || "",
         sourceName: data.sources.name || "",
         type: data.type || "",
-        amount: data.amount || "",
+        amount: data.amount || 0,
         description: data.description || "",
         date: data.date || "",
       });

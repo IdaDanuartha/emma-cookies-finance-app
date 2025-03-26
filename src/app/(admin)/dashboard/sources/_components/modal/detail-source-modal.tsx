@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
+import { Source } from "@/types/source";
 
 export default function DetailSourceModal({
   isOpen,
@@ -13,7 +14,7 @@ export default function DetailSourceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  data
+  data?: Source | null
 }) {
   const [form, setForm] = useState({
     id: "",

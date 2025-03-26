@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Select from "@/components/form/Select";
 import { getSourceOptions } from "@/utils/get_source_options";
 import { ChevronDownIcon } from "lucide-react";
+import { Finance } from "@/types/finance";
+import { z } from "zod";
 
 export default function AddFinanceModal({
   isOpen,
@@ -20,12 +22,13 @@ export default function AddFinanceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newFinance) => void
+  onSuccess: (newFinance: Finance) => void
 }) {
   const [form, setForm] = useState({
+    id: "",
     sourceId: "",
     type: "",
-    amount: "",
+    amount: 0,
     description: "",
     date: new Date().toISOString().split("T")[0],
     sources: {
@@ -34,6 +37,7 @@ export default function AddFinanceModal({
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof FinanceForm, string>>>({});
+  type FinanceForm = z.infer<typeof schemaFinance>;
 
   const validateField = (field: keyof FinanceForm, value: string) => {
     const partialObject = { ...form, [field]: value };
@@ -74,14 +78,14 @@ export default function AddFinanceModal({
     const formData = new FormData();
     formData.append("sourceId", form.sourceId);
     formData.append("type", form.type);
-    formData.append("amount", form.amount);
+    formData.append("amount", form.amount.toString());
     formData.append("description", form.description);
     formData.append("date", form.date);
 
     const response = await postFinance(undefined, formData);
     if (response.success) {
       onSuccess(form)
-      setForm({ sourceId: "", type: "", amount: "", description: "", date: "", sources: {name: ""}});
+      setForm({id: "", sourceId: "", type: "", amount: 0, description: "", date: "", sources: {name: ""}});
       toast.success(response.message);
     } else {
         toast.error(response.message);
@@ -90,7 +94,7 @@ export default function AddFinanceModal({
   };
 
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
-  const [sourceOptions, setSourceOptions] = useState([]);
+  const [sourceOptions, setSourceOptions] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     getSourceOptions().then(setSourceOptions);
@@ -104,7 +108,7 @@ export default function AddFinanceModal({
       }));
       validateField("sourceId", selectedSource);
     }
-  }, [selectedSource]);
+  }, [selectedSource, validateField]);
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const typeOptions = [
@@ -120,7 +124,7 @@ export default function AddFinanceModal({
       }));
       validateField("type", selectedType);
     }
-  }, [selectedType]);
+  }, [selectedType, validateField]);
 
   return (
     <Modal
@@ -150,10 +154,10 @@ export default function AddFinanceModal({
                     },
                   }));
                 }}              
-                value={
+                defaultValue={
                   selectedSource
-                  ? sourceOptions.find(opt => opt.value === selectedSource)
-                  : null
+                  ? sourceOptions.find(opt => opt.value === selectedSource)?.value
+                  : ""
                 }
                 placeholder="Pilih sumber pendapatan"
                 className={errors.sourceId ? "border-red-500 focus-visible:ring-red-500" : ""}
@@ -173,10 +177,10 @@ export default function AddFinanceModal({
               <Select
                 options={typeOptions}
                 onChange={(value) => setSelectedType(value)} 
-                value={
+                defaultValue={
                   selectedType
-                  ? typeOptions.find(opt => opt.value === selectedType)
-                  : null
+                  ? typeOptions.find(opt => opt.value === selectedType)?.value
+                  : ""
                 }
                 placeholder="Pilih jenis keuangan"
                 className={errors.type ? "border-red-500 focus-visible:ring-red-500" : ""}

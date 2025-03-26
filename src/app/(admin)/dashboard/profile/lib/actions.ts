@@ -1,7 +1,8 @@
 import { schemaUser } from "@/lib/schema";
 import supabase from "@/lib/supabase";
+import { ActionResult } from "next/dist/server/app-render/types";
 
-export async function updateProfile(_: unknown, formData: FormData, id: number | undefined): Promise<ActionResult> {
+export async function updateProfile(_: unknown, formData: FormData, id: string | undefined): Promise<ActionResult> {
     const file = formData.get("profile_image") as File | null;
 
     const validate = schemaUser.safeParse({
@@ -60,7 +61,7 @@ export async function updateProfile(_: unknown, formData: FormData, id: number |
 
         if (error) throw error;
     } catch (error) {
-    console.error(error.message);
+        console.error(error);
         return {
             success: false,
             message: "Gagal melakukan perubahan pada data profil",

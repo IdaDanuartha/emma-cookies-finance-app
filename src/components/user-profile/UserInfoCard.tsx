@@ -1,15 +1,15 @@
 "use client";
-import React, { useState } from "react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
-import FileInput from "../form/input/FileInput";
-import Image from "next/image";
+// import React, { useState } from "react";
+// import { useModal } from "../../hooks/useModal";
+// import { Modal } from "../ui/modal";
+// import Button from "../ui/button/Button";
+// import Input from "../form/input/InputField";
+// import Label from "../form/Label";
+// import FileInput from "../form/input/FileInput";
+// import Image from "next/image";
 
 interface UserInfoProps {
-  user: {
+  user?: {
     name: string,
     email: string,
     profile_image: string,
@@ -18,38 +18,38 @@ interface UserInfoProps {
 }
 
 const UserInfoCard: React.FC<UserInfoProps> = ({ user }) => {
-  const [name, setName] = useState(user?.name || "");
+  // const [name, setName] = useState(user?.name || "");
   // const [email, setEmail] = useState(user?.email || "");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  // const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const { isOpen, openModal, closeModal } = useModal();
-  const handleUpdate = async () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    // formData.append("email", email);
-    formData.append("profile_image", imageFile);
+  // const { isOpen, openModal, closeModal } = useModal();
+  // const handleUpdate = async () => {
+  //   const formData = new FormData();
+  //   formData.append("name", name);
+  //   // formData.append("email", email);
+  //   formData.append("profile_image", imageFile);
 
-    const response = await updateFinance(undefined, formData, data.id);
+  //   const response = await updateFinance(undefined, formData, data.id);
 
-    if (response.success) {
-      onSuccess(form)
-      toast.success(response.message);
-    } else {
-      toast.error(response.message);
-    }
-    closeModal();
-  };  
+  //   if (response.success) {
+  //     onSuccess(form)
+  //     toast.success(response.message);
+  //   } else {
+  //     toast.error(response.message);
+  //   }
+  //   closeModal();
+  // };  
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setPreviewImage(imageURL);
-      setImageFile(file); 
-    }
-  };  
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const imageURL = URL.createObjectURL(file);
+  //     setPreviewImage(imageURL);
+  //     setImageFile(file); 
+  //   }
+  // };  
 
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">

@@ -4,6 +4,7 @@ import { Modal } from "@/components/ui/modal";
 import { deleteFinance } from "../../lib/actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+import { Finance } from "@/types/finance";
 
 export default function DeleteFinanceModal({
   isOpen,
@@ -13,17 +14,17 @@ export default function DeleteFinanceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newFinance) => void
-  data
+  onSuccess: (id: string) => void
+  data?: Finance | null
 }) {
   // const [errors, setErrors] = useState<Partial<Record<keyof FinanceForm, string>>>({});
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await deleteFinance(undefined, data.id);
+    const response = await deleteFinance(undefined, data?.id);
 
-    if (response.success) {
+    if (response.success && data?.id) {
       onSuccess(data.id)
       toast.success(response.message);
     } else {

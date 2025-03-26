@@ -2,7 +2,7 @@
 
 import { schemaFinance } from "@/lib/schema";
 import supabase from "@/lib/supabase";
-import { ActionResult } from "@/types";
+import { ActionResult } from "next/dist/server/app-render/types";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function postFinance(_: unknown, formData: FormData): Promise<ActionResult> {
@@ -35,10 +35,10 @@ export async function postFinance(_: unknown, formData: FormData): Promise<Actio
 
         if (error) throw error; // Handle error if insert fails
     } catch (error) {
-        console.log(error.message);
+        console.log(error)
         return {
             success: false,
-            message: error.message,
+            message: "Gagal menambahkan data keuangan",
         };
     }
 
@@ -48,7 +48,7 @@ export async function postFinance(_: unknown, formData: FormData): Promise<Actio
     };
 }
 
-export async function updateFinance(_: unknown, formData: FormData, id: number | undefined): Promise<ActionResult> {
+export async function updateFinance(_: unknown, formData: FormData, id: string | undefined): Promise<ActionResult> {
     const validate = schemaFinance.safeParse({
         sourceId: formData.get("sourceId"),
         type: formData.get("type"),
@@ -76,7 +76,7 @@ export async function updateFinance(_: unknown, formData: FormData, id: number |
 
         if (error) throw error; // Handle error if update fails
     } catch (error) {
-        console.error(error.message);
+        console.log(error)
         return {
             success: false,
             message: "Gagal melakukan perubahan pada data keuangan",
@@ -89,13 +89,13 @@ export async function updateFinance(_: unknown, formData: FormData, id: number |
     };
 }
 
-export async function deleteFinance(_: unknown, id: number | undefined): Promise<ActionResult> {
+export async function deleteFinance(_: unknown, id: string | undefined): Promise<ActionResult> {
     try {
         const { error } = await supabase.from("finances").delete().eq('id', id); // Delete where id matches
 
         if (error) throw error; // Handle error if delete fails
     } catch (error) {
-        console.error(error.message);
+        console.log(error)
         return {
             success: false,
             message: "Gagal menghapus keuangan",

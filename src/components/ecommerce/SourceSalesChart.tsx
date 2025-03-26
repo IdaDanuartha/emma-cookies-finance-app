@@ -9,7 +9,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false })
 
 export default function SourceSalesChart() {
   const [options, setOptions] = useState<ApexOptions>();
-  const [series, setSeries] = useState<[]>([]);
+  const [series, setSeries] = useState<ApexAxisChartSeries>([]);
 
   useEffect(() => {
     async function loadChart() {

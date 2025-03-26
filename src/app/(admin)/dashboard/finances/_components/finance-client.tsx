@@ -120,11 +120,11 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
     XLSX.writeFile(workbook, "data-keuangan.xlsx");
   };
 
-  const [selectedSource, setSelectedSource] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState<string | null>();
+  const [selectedSource, setSelectedSource] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
 
-  const [sourceOptions, setSourceOptions] = useState([]);
+  const [sourceOptions, setSourceOptions] = useState<{ value: string; label: string }[]>([]);
   useEffect(() => {
     getSourceOptions().then(setSourceOptions);
   }, []);
@@ -168,10 +168,12 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
   
 
   const typeOptions = [
+    { value: "", label: "Semua" },
     { value: "pemasukan", label: "Pemasukan" },
     { value: "pengeluaran", label: "Pengeluaran" },
   ];
   const periodOptions = [
+    { value: "", label: "Semua" },
     { value: "day", label: "Hari Ini" },
     { value: "weekly", label: "Minggu Ini" },
     { value: "monthly", label: "Bulan Ini" },
@@ -179,9 +181,9 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
   ];
 
   const clearFilter = () => {
-    setSelectedType(null);
-    setSelectedSource(null);
-    setSelectedPeriod(null);
+    setSelectedType("null");
+    setSelectedSource("null");
+    setSelectedPeriod("null");
     setSearchTerm("");
     setFinances(data); // Reset to original data
   };
@@ -218,7 +220,7 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
             <Input
               placeholder="Cari data keuangan..."
               type="text"
-              value={searchTerm}
+              defaultValue={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
               className="pl-[62px]"
             />
@@ -230,14 +232,13 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
             <div className="relative">
               <Select
                 options={sourceOptions}
-                onChange={(value) => setSelectedSource(value)} 
-                value={
+                onChange={(value) => setSelectedSource(value)}
+                defaultValue={
                   selectedSource
-                  ? sourceOptions.find(opt => opt.value === selectedSource)
-                  : null
+                  ? sourceOptions.find((opt) => opt.value === selectedSource)?.value
+                  : ""
                 }
                 placeholder="Sumber Pendapatan"
-                className="dark:bg-dark-900"
               />
               <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                 <ChevronDownIcon size={18} />
@@ -247,10 +248,10 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
               <Select
                 options={typeOptions}
                 onChange={(value) => setSelectedType(value)}
-                value={
+                defaultValue={
                   selectedType
-                  ? typeOptions.find(opt => opt.value === selectedType)
-                  : null
+                  ? typeOptions.find(opt => opt.value === selectedType)?.value
+                  : ""
                 }
                 placeholder="Jenis Keuangan"
                 className="dark:bg-dark-900"
@@ -263,10 +264,10 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
               <Select
                 options={periodOptions}
                 onChange={(value) => setSelectedPeriod(value)}
-                value={
+                defaultValue={
                   selectedPeriod
-                  ? periodOptions.find(opt => opt.value === selectedPeriod)
-                  : null
+                  ? periodOptions.find(opt => opt.value === selectedPeriod)?.value
+                  : ""
                 }
                 placeholder="Filter Waktu"
                 className="dark:bg-dark-900"
@@ -279,7 +280,7 @@ export default function FinanceClient({ data }: { data: Finance[]  }) {
               <CircleX className="text-red-600" />
             </span>
           </div>
-          <Table data={finances} columns={columns} handleDetail={handleDetail} handleEdit={handleEdit} handleDelete={handleDelete} />
+          <Table<Finance> data={finances} columns={columns} handleDetail={handleDetail} handleEdit={handleEdit} handleDelete={handleDelete} />
         </ComponentCard>
       </div>
 

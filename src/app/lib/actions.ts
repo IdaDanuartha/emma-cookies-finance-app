@@ -20,7 +20,12 @@ export const getLoggedInUser = async () => {
         return data
     }
 
-    return null
+    return {
+        name: "",
+        email: "",
+        profile_image: "",
+        role: ""
+    }
 }
 
 export const signOutAction = async () => {

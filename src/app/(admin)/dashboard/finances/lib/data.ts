@@ -25,6 +25,15 @@ export async function getFinances() {
     }
 }
 
+type FinanceSummary = {
+  sourceId: string;
+  amount: number;
+  date: string;
+  sources: {
+    name: string;
+  }[];
+};
+
 export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' | 'year' = 'year') {
   try {
     const now = new Date();
@@ -61,18 +70,18 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
 
     if (error) throw error;
 
-    const grouped = data.reduce((acc, item) => {
+    const grouped = (data as FinanceSummary[]).reduce((acc, item) => {
       const sourceId = item.sourceId;
-      const name = item.sources?.name || "Unknown";
-
+      const name = item.sources?.[0]?.name || "Unknown";
+    
       if (!acc[sourceId]) {
         acc[sourceId] = { name, total: 0 };
       }
-
+    
       acc[sourceId].total += item.amount || 0;
-
+    
       return acc;
-    }, {} as Record<string, { name: string; total: number }>);
+    }, {} as Record<string, { name: string; total: number }>);    
 
     return Object.values(grouped);
   } catch (error) {

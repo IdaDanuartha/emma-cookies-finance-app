@@ -8,6 +8,8 @@ import { Modal } from "@/components/ui/modal";
 import { updateSource } from "../../lib/actions";
 import { schemaSource } from "@/lib/schema";
 import { toast } from "react-toastify";
+import { Source } from "@/types/source";
+import { z } from "zod";
 
 export default function EditSourceModal({
   isOpen,
@@ -17,13 +19,14 @@ export default function EditSourceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newSource) => void
-  data
+  onSuccess: (newSource: Source) => void
+  data?: Source | null
 }) {
   const [form, setForm] = useState({
     id: "",
     name: "",
     location: "",
+    updatedAt: "",
   });
 
   useEffect(() => {
@@ -32,11 +35,12 @@ export default function EditSourceModal({
         id: data.id || "",
         name: data.name || "",
         location: data.location || "",
+        updatedAt: data.updatedAt || "",
       });
     }
   }, [data]);
 
-
+  type SourceForm = z.infer<typeof schemaSource>;
   const [errors, setErrors] = useState<Partial<Record<keyof SourceForm, string>>>({});
 
   const validateField = (field: keyof SourceForm, value: string) => {
@@ -68,6 +72,7 @@ export default function EditSourceModal({
       setErrors({
         name: fieldErrors.name?.[0] || "",
         location: fieldErrors.location?.[0] || "",
+        updatedAt: fieldErrors.updatedAt?.[0] || "",
       });
       return;
     }
@@ -75,8 +80,9 @@ export default function EditSourceModal({
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("location", form.location);
+    formData.append("updatedAt", form.updatedAt);
 
-    const response = await updateSource(undefined, formData, data.id);
+    const response = await updateSource(undefined, formData, data?.id);
 
     if (response.success) {
       onSuccess(form)

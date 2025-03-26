@@ -145,7 +145,7 @@ export default function SourcePageClient({ data }: { data: Source[]  }) {
             <Input
               placeholder="Cari data sumber pendapatan..."
               type="text"
-              value={searchTerm}
+              defaultValue={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
               className="pl-[62px]"
             />
@@ -153,7 +153,7 @@ export default function SourcePageClient({ data }: { data: Source[]  }) {
               <Search size={15} />
             </span>
           </form>
-          <Table data={sources} columns={columns} handleDetail={handleDetail} handleEdit={handleEdit} handleDelete={handleDelete} />
+          <Table<Source> data={sources} columns={columns} handleDetail={handleDetail} handleEdit={handleEdit} handleDelete={handleDelete} />
         </ComponentCard>
       </div>
 

@@ -4,6 +4,7 @@ import { Modal } from "@/components/ui/modal";
 import { deleteSource } from "../../lib/actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+import { Source } from "@/types/source";
 
 export default function DeleteSourceModal({
   isOpen,
@@ -13,17 +14,17 @@ export default function DeleteSourceModal({
 }: {
   isOpen: boolean
   closeModal: () => void
-  onSuccess: (newSource) => void
-  data
+  onSuccess: (id: string) => void
+  data?: Source | null
 }) {
   // const [errors, setErrors] = useState<Partial<Record<keyof SourceForm, string>>>({});
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await deleteSource(undefined, data.id);
+    const response = await deleteSource(undefined, data?.id);
 
-    if (response.success) {
+    if (response.success && data?.id) {
       onSuccess(data.id)
       toast.success(response.message);
     } else {

@@ -8,18 +8,21 @@ import {
 } from "../ui/table";
 import { Pencil, Trash } from "lucide-react";
 import { formatDate, formatRupiah } from "@/utils/format";
+import { Column } from "@/types/column";
 
-type BasicTableProps = {
-  columns: Array;
-  data: object;
-  handleDetail: (item) => void;
-  handleEdit: (item) => void;
-  handleDelete: (item) => void;
+// ✅ Remove T from here
+type BasicTableProps<T extends { id: string }> = {
+  columns: Column[];
+  data: T[];
+  handleDetail: (item: T) => void;
+  handleEdit: (item: T) => void;
+  handleDelete: (item: T) => void;
   currentPage: number;
   pageSize: number;
 };
 
-const BasicTable: React.FC<BasicTableProps> = ({
+// ✅ Add T to the component definition
+function BasicTable<T extends { id: string; [key: string]: any }>({
   columns = [],
   data,
   handleDetail,
@@ -27,46 +30,30 @@ const BasicTable: React.FC<BasicTableProps> = ({
   handleDelete,
   currentPage,
   pageSize,
-}) => {  
+}: BasicTableProps<T>) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <Table>
-            {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                <TableCell
-                  isheader="true"
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
+                <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                   No
                 </TableCell>
                 {columns.map((column, index) => (
-                  <TableCell key={index}
-                    isheader="true"
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
+                  <TableCell key={index} className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                     {column.name}
                   </TableCell>
                 ))}
-                <TableCell
-                  isheader="true"
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  
-                </TableCell>
+                <TableCell className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400" />
               </TableRow>
             </TableHeader>
 
-            {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length + 2} // +2 for "No" column and action buttons
-                    className="text-center py-6 text-gray-500 dark:text-gray-400"
-                  >
+                  <TableCell colSpan={columns.length + 2} className="text-center py-6 text-gray-500 dark:text-gray-400">
                     Tidak ada data yang tersedia
                   </TableCell>
                 </TableRow>
@@ -77,19 +64,20 @@ const BasicTable: React.FC<BasicTableProps> = ({
                       {(currentPage - 1) * pageSize + index + 1}
                     </TableCell>
                     {columns.map((column) => (
-                      <TableCell onClick={() => handleDetail(item)}
+                      <TableCell
+                        onClick={() => handleDetail(item)}
                         key={column.key}
                         className="px-5 py-3 capitalize text-gray-700 dark:text-gray-400"
                       >
                         {item[column.key] === "" || item[column.key] == null
-                        ? "-"
-                        : column.is_format_rupiah
-                        ? formatRupiah(item[column.key])
-                        : column.is_format_date
-                        ? formatDate(item[column.key], false)
-                        : column.have_relation
-                        ? item[column.key][column.relation_key]
-                        : item[column.key]}
+                          ? "-"
+                          : column.is_format_rupiah
+                          ? formatRupiah(item[column.key])
+                          : column.is_format_date
+                          ? formatDate(item[column.key], false)
+                          : column.have_relation && column.relation_key
+                          ? item[column.key]?.[column.relation_key]
+                          : item[column.key]}                        
                       </TableCell>
                     ))}
                     <TableCell className="px-5 py-3 flex items-center text-gray-700 dark:text-gray-400">
