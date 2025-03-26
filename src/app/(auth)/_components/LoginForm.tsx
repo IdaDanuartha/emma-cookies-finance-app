@@ -2,12 +2,11 @@
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
 import React, { useState } from "react";
 import { signInAction } from "../lib/actions";
 import { SubmitButton } from "@/components/button/submit-button";
 import Alert from "@/components/ui/alert/Alert";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -69,9 +68,9 @@ export default function SignInForm() {
                       className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                     >
                       {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                        <EyeIcon size={16} />
                       ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                        <EyeOff size={16} />
                       )}
                     </span>
                   </div>
