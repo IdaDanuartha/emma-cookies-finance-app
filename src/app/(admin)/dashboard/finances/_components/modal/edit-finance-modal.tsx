@@ -55,10 +55,10 @@ export default function EditFinanceModal({
           name: data.sources.name
         }
       });
+      setSelectedSource(data.sourceId);
+      setSelectedType(data.type);
     }
 
-    if(data?.sourceId) setSelectedSource(data.sourceId);
-    if(data?.type) setSelectedType(data.type);
   }, [data]);
 
 

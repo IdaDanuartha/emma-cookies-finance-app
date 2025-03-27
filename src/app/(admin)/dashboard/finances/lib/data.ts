@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase";
+import { getSourceById } from "../../sources/lib/data";
 
 export async function getFinances() {
     try {
@@ -70,19 +71,23 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
 
     if (error) throw error;
 
-    const grouped = (data as FinanceSummary[]).reduce((acc, item) => {
-      const sourceId = item.sourceId;
-      const name = item.sources?.[0]?.name || "Unknown";
-    
-      if (!acc[sourceId]) {
-        acc[sourceId] = { name, total: 0 };
-      }
-    
-      acc[sourceId].total += item.amount || 0;
-    
-      return acc;
-    }, {} as Record<string, { name: string; total: number }>);    
+    const grouped: Record<string, { name: string; total: number }> = {};
 
+    for (const item of data as FinanceSummary[]) {
+      const sourceId = item.sourceId;
+
+      // Get the source name asynchronously
+      const source = await getSourceById(sourceId);
+      const name = source?.name || "-";
+
+      if (!grouped[sourceId]) {
+        grouped[sourceId] = { name, total: 0 };
+      }
+
+      grouped[sourceId].total += item.amount || 0;
+    }
+
+    // Return the grouped data as an array
     return Object.values(grouped);
   } catch (error) {
     console.error("Error fetching grouped totals:", error);
