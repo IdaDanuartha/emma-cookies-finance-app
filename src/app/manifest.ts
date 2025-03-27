@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next'
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Emma Cookies Finance App',
-    short_name: 'EmmaCookies',
+    short_name: 'Emma Cookies',
     description: 'Aplikasi manajemen keuangan emma cookies',
     start_url: '/dashboard',
     display: 'standalone',
