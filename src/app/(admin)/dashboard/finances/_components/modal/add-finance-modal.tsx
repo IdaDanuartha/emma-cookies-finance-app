@@ -88,7 +88,7 @@ export default function AddFinanceModal({
       setForm({id: "", sourceId: "", type: "", amount: 0, description: "", date: "", sources: {name: ""}});
       toast.success(response.message);
     } else {
-        toast.error(response.message);
+      toast.error(response.message);
     }
     closeModal();
   };

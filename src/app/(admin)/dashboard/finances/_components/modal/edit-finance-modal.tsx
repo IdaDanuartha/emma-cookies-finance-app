@@ -125,13 +125,20 @@ export default function EditFinanceModal({
 
   useEffect(() => {
     if (selectedSource !== null) {
+      const selectedSourceOption = sourceOptions.find(
+        (opt) => opt.value === selectedSource
+      );
+      
       setForm((prev) => ({
         ...prev,
         sourceId: selectedSource,
+        sources: {
+          name: selectedSourceOption ? selectedSourceOption.label : "",
+        },  
       }));
-      validateField("sourceId", selectedSource);
+      // validateField("sourceId", selectedSource);
     }
-  }, [selectedSource, validateField]);
+  }, [selectedSource, sourceOptions]);
 
   const typeOptions = [
     { value: "pemasukan", label: "Pemasukan" },
@@ -144,9 +151,9 @@ export default function EditFinanceModal({
         ...prev,
         type: selectedType,
       }));
-      validateField("type", selectedType);
+      // validateField("type", selectedType);
     }
-  }, [selectedType, validateField]);
+  }, [selectedType]);
 
   return (
     <Modal
