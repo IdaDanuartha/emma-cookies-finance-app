@@ -8,7 +8,7 @@ export default async function AdminLayoutServer({
   children: React.ReactNode;
 }) {
   const user = await getLoggedInUser()
-  if (!user) {
+  if (!user.email) {
     redirect("/login");
   }
 

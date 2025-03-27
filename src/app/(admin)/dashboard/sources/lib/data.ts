@@ -10,7 +10,7 @@ export async function getSources() {
 
         return data;
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return [];
     }
 }
@@ -27,7 +27,7 @@ export async function searchSources(term: string) {
   
       return data;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       return [];
     }
 }  
@@ -44,7 +44,7 @@ export async function getSourceById(id: string) {
 
         return data;
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return null;
     }
 }

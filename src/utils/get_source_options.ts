@@ -1,6 +1,6 @@
 import supabase from "@/lib/supabase";
 
-export async function getSourceOptions() {
+export async function getSourceOptions(showAllOption = true) {
   try {
     const { data, error } = await supabase
       .from("sources")
@@ -14,14 +14,26 @@ export async function getSourceOptions() {
       label: source.name,
     }));
 
+    const allOption = { value: "", label: "Semua" };
+
+    if(showAllOption) {
+      return [
+        allOption,
+        ...options,
+      ];
+    }
     return [
-      { value: "", label: "Semua" },
       ...options,
     ];
+
   } catch (error) {
     console.error("Failed to fetch source options:", error);
-    return [
-      { value: "", label: "Semua" },
-    ];
+    if(showAllOption) {
+      return [
+        { value: "", label: "Semua" },
+      ];
+    } else {
+      return []
+    }
   }
 }

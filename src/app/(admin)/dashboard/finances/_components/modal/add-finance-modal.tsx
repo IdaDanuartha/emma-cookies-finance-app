@@ -97,7 +97,7 @@ export default function AddFinanceModal({
   const [sourceOptions, setSourceOptions] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
-    getSourceOptions().then(setSourceOptions);
+    getSourceOptions(false).then(setSourceOptions);
   }, []);
 
   useEffect(() => {

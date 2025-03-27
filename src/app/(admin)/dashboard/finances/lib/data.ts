@@ -25,14 +25,14 @@ export async function getFinances() {
     }
 }
 
-type FinanceSummary = {
-  sourceId: string;
-  amount: number;
-  date: string;
-  sources: {
-    name: string;
-  }[];
-};
+// type FinanceSummary = {
+//   sourceId: string;
+//   amount: number;
+//   date: string;
+//   sources: {
+//     name: string;
+//   };
+// };
 
 export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' | 'year' = 'year') {
   try {
@@ -70,9 +70,9 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
 
     if (error) throw error;
 
-    const grouped = (data as FinanceSummary[]).reduce((acc, item) => {
+    const grouped = data.reduce((acc, item) => {
       const sourceId = item.sourceId;
-      const name = item.sources?.[0]?.name || "Unknown";
+      const name = item.sources?.name || "Unknown";
     
       if (!acc[sourceId]) {
         acc[sourceId] = { name, total: 0 };
@@ -114,7 +114,8 @@ export async function getTotalAmountsYearly(year = new Date().getFullYear()) {
       .from('finances')
       .select('amount, date')
       .gte('date', `${year}-01-01`)
-      .lte('date', `${year}-12-31`);
+      .lte('date', `${year}-12-31`)
+      .eq('type', 'pemasukan');
 
     if (error) throw error;
 
