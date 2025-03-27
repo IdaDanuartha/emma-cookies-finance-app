@@ -67,6 +67,7 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
         amount,
         date
       `)
+      .eq('type', 'pemasukan')
       .gte('date', fromDate.toISOString());
 
     if (error) throw error;
