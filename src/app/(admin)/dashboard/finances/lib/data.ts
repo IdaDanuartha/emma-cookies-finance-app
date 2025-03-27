@@ -37,7 +37,7 @@ type FinanceSummary = {
 
 export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' | 'year' = 'year') {
   try {
-    const now = new Date();
+    const now = new Date(); 
     let fromDate: Date;
 
     switch (filter) {
