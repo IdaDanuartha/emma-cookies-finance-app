@@ -1,5 +1,11 @@
 import supabase from "@/lib/supabase";
 import { getSourceById } from "../../sources/lib/data";
+import {
+  getStartOfDayGMT8,
+  getStartOfWeekGMT8,
+  getStartOfMonthGMT8,
+  getStartOfYearGMT8,
+} from "@/utils/date_utils";
 
 export async function getFinances() {
     try {
@@ -37,25 +43,24 @@ type FinanceSummary = {
 
 export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' | 'year' = 'year') {
   try {
-    const now = new Date(); 
     let fromDate: Date;
 
     switch (filter) {
-      case 'day':
-        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      case "day":
+        fromDate = getStartOfDayGMT8();
         break;
-      case 'week': {
-        const dayOfWeek = now.getDay(); // 0 = Sunday
-        const diffToMonday = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Get last Monday
-        fromDate = new Date(now.getFullYear(), now.getMonth(), diffToMonday);
+      case "week":
+        fromDate = getStartOfWeekGMT8();
         break;
-      }
-      case 'month':
-        fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      case "month":
+        fromDate = getStartOfMonthGMT8();
         break;
-      case 'year':
+      case "year":
+        fromDate = getStartOfYearGMT8();
+        break;
+      case "all":
       default:
-        fromDate = new Date(now.getFullYear(), 0, 1);
+        fromDate = new Date(0); // Get all records (timestamp 0 = 1970)
         break;
     }
 
@@ -95,46 +100,46 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
   }
 }
 
-export async function getTotalAmountsByType(type: 'pemasukan' | 'pengeluaran', filter: 'day' | 'week' | 'month' | 'year' | 'all' = 'all') {
+export async function getTotalAmountsByType(
+  type: "pemasukan" | "pengeluaran",
+  filter: "day" | "week" | "month" | "year" | "all" = "all"
+) {
   try {
-    const now = new Date();
     let fromDate: Date;
 
     switch (filter) {
-      case 'day':
-        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      case "day":
+        fromDate = getStartOfDayGMT8();
         break;
-      case 'week': {
-        const dayOfWeek = now.getDay(); // 0 = Sunday
-        const diffToMonday = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Get last Monday
-        fromDate = new Date(now.getFullYear(), now.getMonth(), diffToMonday);
+      case "week":
+        fromDate = getStartOfWeekGMT8();
         break;
-      }
-      case 'month':
-        fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      case "month":
+        fromDate = getStartOfMonthGMT8();
         break;
-      case 'year':
-        fromDate = new Date(now.getFullYear(), 0, 1);
+      case "year":
+        fromDate = getStartOfYearGMT8();
         break;
-      case 'all':
+      case "all":
       default:
-        fromDate = new Date(0);
+        fromDate = new Date(0); // Get all records if filter is "all"
         break;
     }
 
     const { data, error } = await supabase
-      .from('finances')
-      .select('amount')
-      .eq('type', type)
-      .gte('date', fromDate.toISOString());
+      .from("finances")
+      .select("amount")
+      .eq("type", type)
+      .gte("date", fromDate.toISOString());
 
     if (error) throw error;
 
+    // Calculate the total amount for the selected type
     const total = data.reduce((sum, item) => sum + (item.amount || 0), 0);
 
     return total;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching total amount by type:", error);
     return 0;
   }
 }
