@@ -56,11 +56,8 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
         fromDate = getStartOfMonthGMT8();
         break;
       case "year":
-        fromDate = getStartOfYearGMT8();
-        break;
-      case "all":
       default:
-        fromDate = new Date(0); // Get all records (timestamp 0 = 1970)
+        fromDate = getStartOfYearGMT8();
         break;
     }
 
