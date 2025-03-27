@@ -3,6 +3,7 @@
   "version": "2.0.1",
   "private": true,
   "scripts": {
+    "preinstall": "npm install --force",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
