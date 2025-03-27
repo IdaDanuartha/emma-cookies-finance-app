@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
+import { EcommerceMetrics } from "@/components/analytics/EcommerceMetrics";
 import React from "react";
-import SourceSalesChart from "@/components/ecommerce/SourceSalesChart";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
+import SourceSalesChart from "@/components/analytics/SourceSalesChart";
+import StatisticsChart from "@/components/analytics/StatisticsChart";
 
 export const metadata: Metadata = {
   title:

@@ -95,12 +95,38 @@ export async function getTotalAmountsBySource(filter: 'day' | 'week' | 'month' |
   }
 }
 
-export async function getTotalAmountsByType(type: 'pemasukan' | 'pengeluaran') {
+export async function getTotalAmountsByType(type: 'pemasukan' | 'pengeluaran', filter: 'day' | 'week' | 'month' | 'year' | 'all' = 'all') {
   try {
+    const now = new Date();
+    let fromDate: Date;
+
+    switch (filter) {
+      case 'day':
+        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case 'week': {
+        const dayOfWeek = now.getDay(); // 0 = Sunday
+        const diffToMonday = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Get last Monday
+        fromDate = new Date(now.getFullYear(), now.getMonth(), diffToMonday);
+        break;
+      }
+      case 'month':
+        fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case 'year':
+        fromDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      case 'all':
+      default:
+        fromDate = new Date(0);
+        break;
+    }
+
     const { data, error } = await supabase
       .from('finances')
       .select('amount')
-      .eq('type', type);
+      .eq('type', type)
+      .gte('date', fromDate.toISOString());
 
     if (error) throw error;
 
