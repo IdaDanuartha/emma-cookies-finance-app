@@ -1,5 +1,6 @@
 import supabase from "@/lib/supabase";
 import { getSourceById } from "../../sources/lib/data";
+import { getStartOfDayGMT8 } from "@/utils/date_utils";
 
 export async function getFinances() {
     try {
@@ -103,7 +104,7 @@ export async function getTotalAmountsByType(type: 'pemasukan' | 'pengeluaran', f
 
     switch (filter) {
       case 'day':
-        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        fromDate = getStartOfDayGMT8()
         break;
       case 'week': {
         const dayOfWeek = now.getDay(); // 0 = Sunday

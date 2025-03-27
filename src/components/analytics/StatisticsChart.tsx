@@ -98,7 +98,7 @@ export default function StatisticsChart() {
             Statistik Pendapatan
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Lihat laporan pendapatan dari masing-masing sumber tiap hari, minggu, bulan dan tahunan
+            Lihat laporan pendapatan dari masing-masing sumber tiap hari, minggu, bulan dan tahun
           </p>
         </div>
         <div className="flex items-center w-full gap-3 sm:justify-end">
