@@ -12,7 +12,11 @@ export const metadata: Metadata = {
 
 export default async function Profile() {
   const user = await getLoggedInUser()
-
+  
+  if (!user) {
+    return <p className="text-red-500">User not found or not logged in.</p>;
+  }
+  
   return (
     <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
@@ -21,7 +25,7 @@ export default async function Profile() {
         </h3>
         <div className="space-y-6">
           <UserMetaCard />
-          <UserInfoCard user={user} />
+          <UserInfoCard user={user ?? { name: '', email: '', profile_image: '', role: '' }} />
         </div>
       </div>
     </div>

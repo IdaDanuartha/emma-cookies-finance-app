@@ -14,7 +14,7 @@ export default async function AuthLayout({
   children: React.ReactNode;
 }) {
   const user = await getLoggedInUser()
-  if (user.email) {
+  if (user) {
     redirect("/dashboard");
   }
 
