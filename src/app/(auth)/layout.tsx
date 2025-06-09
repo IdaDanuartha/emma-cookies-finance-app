@@ -15,7 +15,9 @@ export default async function AuthLayout({
 }) {
   const user = await getLoggedInUser()
   if (user) {
-    redirect("/dashboard");
+    if(user?.email) {
+      redirect("/dashboard");
+    }
   }
 
   return (
