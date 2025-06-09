@@ -9,8 +9,10 @@ export default async function AdminLayoutServer({
 }) {
   const user = await getLoggedInUser()
   
-  if(!user) {
-    redirect("/login");
+  if(user) {
+    if(!user.email) {
+      redirect("/login");
+    }
   }
 
   return <AdminLayoutClient>{children}</AdminLayoutClient>;
