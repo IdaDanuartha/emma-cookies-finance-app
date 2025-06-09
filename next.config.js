@@ -10,7 +10,7 @@ const withPWA = require('next-pwa')({
 module.exports = withPWA({
   reactStrictMode: true,
   images: {
-    domains: ["kckicxwbegihwljknvgk.supabase.co"], // Tambahkan domain supabase
+    domains: ["zatxazslypyvobuhblvj.supabase.co"], // Tambahkan domain supabase
   },
     /**
    * @param {Configuration} config

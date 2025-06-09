@@ -17,7 +17,7 @@ export const createClient = async (remember = false) => {
             cookiesToSet.forEach(({ name, value, options }) => {
               cookieStore.set(name, value, {
                 ...options,
-                maxAge: remember ? 60 * 60 * 24 * 30 : undefined,
+                maxAge: remember ? 60 * 60 * 24 * 30 * 12 : undefined,
               });
             });
           } catch (error) {

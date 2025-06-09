@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { EcommerceMetrics } from "@/components/analytics/EcommerceMetrics";
 import React from "react";
 import SourceSalesChart from "@/components/analytics/SourceSalesChart";

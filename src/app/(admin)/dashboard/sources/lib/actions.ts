@@ -19,6 +19,7 @@ export async function postSource(_: unknown, formData: FormData): Promise<Action
     }
 
     try {
+        console.log("tes")
         const { error } = await supabase.from("sources").insert([
             {
                 id: uuidv4(),

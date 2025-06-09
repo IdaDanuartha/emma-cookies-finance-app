@@ -6,6 +6,8 @@ export async function getSources() {
             ascending: false
         });
 
+        console.log(await supabase.from('sources').select("*"))
+
         if (error) throw error;
 
         return data;

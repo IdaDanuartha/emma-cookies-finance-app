@@ -14,7 +14,7 @@ export const getLoggedInUser = async () => {
             .from('users')
             .select('name, email, role, profile_image')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
         if (error) throw error;
         return data
